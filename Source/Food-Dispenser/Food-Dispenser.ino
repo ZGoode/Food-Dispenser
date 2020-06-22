@@ -67,12 +67,13 @@ long previousMillis = 0;
 long previousMillisIP = 0;
 long interval = 5000;
 long IPInterval = 10000;
-long previousMillisFeedingTime = 0;
-long FeedingTimeInterval = 60000;
+long previousMillisAugerOn = 0;
+long AugerInterval = 60000;
 long previousMillisServo = 0;
 long servoInterval = 0;
 
 boolean augerOn = false;
+boolean augerOff = true;
 
 long millisPerCup = 250; //fill this variable
 
@@ -233,7 +234,11 @@ void loop() {
     display.display();
   }
 
-  if (currentMillis - previousMillisFeedingTime > FeedingTimeInterval) {
+  if (currentMillis - previousMillisAugerOn > AugerInterval) {
+    augerOff = true;
+  }
+
+  if (augerOff) {
     for (int i; i < lengthOfFeedingArray; i++) {
       int temp = feedingHours[i];
 
@@ -247,44 +252,57 @@ void loop() {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           } else if ((getTimeZone(1) == 1) && monday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           } else if ((getTimeZone(1) == 2) && tuesday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           } else if ((getTimeZone(1) == 3) && wednesday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           } else if ((getTimeZone(1) == 4) && thursday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
           } else if ((getTimeZone(1) == 5) && friday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           } else if ((getTimeZone(1) == 6) && saturday[i]) {
             myservo.attach(D4);
             myservo.write(180);
             previousMillisServo = currentMillis;
+            previousMillisAugerOn = currentMillis;
             servoInterval = millisPerCup * cups[i];
             augerOn = true;
+            augerOff = false;
           }
         }
       }
@@ -664,9 +682,8 @@ int getTimeZone(int modes) {
         return 6;
       }
     }
-    } else {
-      return timeClient.getDay();
-    }
+  } else {
+    return timeClient.getDay();
   }
 }
 
