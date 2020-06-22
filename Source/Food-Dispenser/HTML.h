@@ -108,6 +108,7 @@ String configurePage = "<div class='bgimg w3-display-container w3-opacity-min' i
                        "</div>";
 
 String controlPage = "<div class='bgimg w3-display-container w3-opacity-min main' id='home'>"
+                     "<div class='w3-container'>"
                      "<div class='sidenav'>"
                      "<form class='w3-container' action='/updateControl' method='get'>"
                      "<h2>Feeding Config:</h2>"
@@ -126,6 +127,7 @@ String controlPage = "<div class='bgimg w3-display-container w3-opacity-min main
                      "<label>Cups of Food: </label><input class='w3-input w3-border w3-margin-bottom' type='text' name='cupsoffood' value='0'></p>"
                      "<button class='w3-button w3-block w3-grey w3-section w3-padding' type='submit'>Save</button>"
                      "</form>"
+                     "</div>"
                      "</div>"
                      "<div class='w3-display-middle' style='white-space:nowrap;'>"
                      "<div class='w3-black'>"

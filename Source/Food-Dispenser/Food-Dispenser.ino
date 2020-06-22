@@ -1,3 +1,7 @@
+//fix saving and retreiving stored data
+//fix html sidebar
+//fix control page
+
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
