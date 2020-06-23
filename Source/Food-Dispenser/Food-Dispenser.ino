@@ -79,7 +79,7 @@ long servoInterval = 0;
 boolean augerOn = false;
 boolean augerOff = true;
 
-long millisPerCup = 250; //fill this variable
+long millisPerCup = 5000; //fill this variable
 
 boolean ENABLE_OTA = true;
 String OTA_Password = "";
@@ -94,7 +94,7 @@ NTPClient timeClient(ntpUDP, "ntp1.net.berkeley.edu");
 const int I2C_DISPLAY_ADDRESS = 0x3c; // I2C Address of your Display (usually 0x3c or 0x3d)
 const int SDA_PIN = D2;
 const int SCL_PIN = D5;
-const boolean INVERT_DISPLAY = true; // true = pins at top | false = pins at the bottom
+const boolean INVERT_DISPLAY = false; // true = pins at top | false = pins at the bottom
 //#define DISPLAY_SH1106       // Uncomment this line to use the SH1106 display -- SSD1306 is used by default and is most common
 
 // Initialize the oled display for I2C_DISPLAY_ADDRESS
@@ -205,6 +205,9 @@ void setup(void) {
   } else {
     Serial.println("WEBSERVER DISABLED");
   }
+
+  display.clear();
+  display.display();
 }
 
 void loop() {
@@ -214,13 +217,14 @@ void loop() {
 
   unsigned long currentMillis = millis();
 
-  if (digitalRead(IPAddressButton) == HIGH) { //IP Address Mode
+  if (digitalRead(IPAddressButton) == LOW) { //IP Address Mode
     String tempString = "";
 
     previousMillisIP = currentMillis;
 
     displayIP = true;
 
+    display.clear();
     display.setTextAlignment(TEXT_ALIGN_CENTER);
     display.setFont(ArialMT_Plain_10);
     display.drawString(64, 10, "Web Interface On");
@@ -567,11 +571,6 @@ void handleControlNoPassword() {
 
 String reportFeedingTimes() {
   String temp = "<div class='w3-container'><h2>Feeding Times:";
-  temp.concat(getTimeZone(0));
-  temp.concat(":");
-  temp.concat(timeClient.getMinutes());
-  temp.concat(" ");
-  temp.concat(getTimeZone(1));
   temp.concat("</h2>");
 
   for (int i = 0; i < lengthOfFeedingArray; i++) {
