@@ -128,7 +128,7 @@ void setup(void) {
 
   pinMode(IPAddressButton, INPUT);
 
-  readSettings();
+  //readSettings();
 
   //initialize display
   display.init();
@@ -369,11 +369,98 @@ void writeSettings() {
     f.println("www_password=" + String(www_password));
     f.println("otapassword=" + String(OTA_Password));
     f.println("timezone=" + String(timeZone));
-    //add support for afarray
-    //add support for length of afarray
+    f.println("lengthOfFeedingArray=" + String(lengthOfFeedingArray));
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "feedingHours";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(feedingHours[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "feedingMinutes";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(feedingMinutes[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "AMPM";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(AMPM[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "monday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(monday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "tuesday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(tuesday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "wednesday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(wednesday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "thursday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(thursday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "friday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(friday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "saturday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(saturday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "sunday";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(sunday[i]));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "cups";
+      temp.concat(i);
+      temp.concat("=");
+
+      f.println(temp + String(cups[i]));
+    }
   }
   f.close();
-  readSettings();
+  //readSettings();
 }
 
 void handleUpdateConfigure() {
@@ -388,7 +475,7 @@ void handleUpdateConfigure() {
   OTA_Password = server.arg("otapassword");
   timeZone = server.arg("timezone").toInt();
 
-  writeSettings();
+  //writeSettings();
   handleConfigureNoPassword();
 }
 
@@ -461,7 +548,7 @@ void handleUpdateControl() {  //fix this for the control page
 
     if ((server.arg("ampm").toInt()) == 1) {
       AMPM[placeholder] = true;
-    } else {
+    } else if ((server.arg("ampm").toInt()) == 2){
       AMPM[placeholder] = false;
     }
 
@@ -476,14 +563,14 @@ void handleUpdateControl() {  //fix this for the control page
     cups[placeholder] = temp.toDouble();
   }
 
-  writeSettings();
+  //writeSettings();
   handleControlNoPassword();
 }
 
 void readSettings() {
   if (SPIFFS.exists(CONFIG) == false) {
     Serial.println("Settings File does not yet exists.");
-    writeSettings();
+    //writeSettings();
     return;
   }
   File fr = SPIFFS.open(CONFIG, "r");
@@ -511,8 +598,132 @@ void readSettings() {
       OTA_Password = line.substring(line.lastIndexOf("otapassword=") + 12).toInt();
       Serial.println("otapassword=" + String(OTA_Password));
     }
+    if (line.indexOf("lengthOfFeedingArray=") >= 0) {
+      lengthOfFeedingArray = line.substring(line.lastIndexOf("lengthOfFeedingArray=") + 21).toInt();
+      Serial.println("lengthOfFeedingArray=" + String(lengthOfFeedingArray));
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "feedingHours";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        feedingHours.add(line.substring(line.lastIndexOf(temp) + temp.length()).toInt());
+        Serial.println(temp + String(feedingHours[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "feedingMinutes";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        feedingMinutes.add(line.substring(line.lastIndexOf(temp) + temp.length()).toInt());
+        Serial.println(temp + String(feedingMinutes[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "AMPM";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        AMPM.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(AMPM[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "monday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        monday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(monday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "tuesday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        tuesday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(tuesday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "wednesday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        wednesday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(wednesday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "thursday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        thursday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(thursday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "friday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        friday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(friday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "saturday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        saturday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(saturday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "sunday";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        sunday.add(line.substring(line.lastIndexOf(temp) + temp.length()));
+        Serial.println(temp + String(sunday[i]));
+      }
+    }
+
+    for (int i = 0; i < lengthOfFeedingArray; i++) {
+      String temp = "cups";
+      temp.concat(i);
+      temp.concat("=");
+
+      if (line.indexOf(temp) >= 0) {
+        cups.add(line.substring(line.lastIndexOf(temp) + temp.length()).toInt());
+        Serial.println(temp + String(cups[i]));
+      }
+    }
     //add suport for afarray
-    //add variable for length of afarray
   }
   fr.close();
 }
